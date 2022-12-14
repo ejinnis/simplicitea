@@ -1,16 +1,22 @@
+import random
+
 name = 'Mr. Potter'
 email = 'apotter@wsd1.org'
 teaID = [0,1,2,3,4,5,6,7]
 teas = ["Earl Grey","Orange Pekoe","Peppermint","Calmomile","English Breakfast","Chai","Green","Oolong"]
+bagCountsID = [0,1,2]
+bagCounts = [24,72,128]
+shippingID = [0,1,2]
+shippingOptions = ["Standard","Express","Overnight"]
 total = 0
-#make the tea names proper english for use in orderFinalizer
 isInStock = [True,True,False,True,True,True,False,True]
-
 
 
 def main():
     welcomeScreen(name)
     confirmOrder(orderFinalizer(teaPicker()))
+
+#def emailinit():
 
 def getTotal(item):
     global total
@@ -18,11 +24,10 @@ def getTotal(item):
     return total
 
 
-
-
 def welcomeScreen(name):
     print("Welcome, "+str(name)+" to Simplicitea!")
     input("Press enter to begin.")
+
 
 def teaPicker():
     while True:
@@ -35,6 +40,7 @@ def teaPicker():
                 print("We're sorry, that tea is out of stock! Please check again later, or select a different tea.")
         else:
             print("Please input the number beside the tea.")
+
 
 def orderFinalizer(tea):
     while True:
@@ -70,12 +76,34 @@ def orderFinalizer(tea):
     print("+12% GST and PST, +2% Service fee")
     grandTotal = round(getTotal(taxAndService),2)
     print("Your grand total is $"+str(grandTotal))
-    return [getTea,getBags,getShip,grandTotal]
+    return [tea,getBags,getShip,grandTotal]
+
 
 def confirmOrder(details):
-    #print details of order using return of orderFinalizer
+    for i in range(7):
+        if details[0] == teaID[i]:
+            print("Selected tea: "+teas[i])
+    for i in range(3):
+        if details[1] == bagCountsID[i]:
+            print("Selected quantity: "+str(bagCounts[i])+" bags")
+    for i in range(3):
+        if details[2] == shippingID[i]:
+            print("Selected shipping: "+shippingOptions[i])
+
     isConfirmed = input("Place your order? (y/n) \n")
-    if isConfirmed == 'y':
+    while True:
+        if isConfirmed in ("y","yes"):
+            orderNum = 74627634773 #sendConfirm(details)
+            print("Your order has been placed! Your order # is: "+str(orderNum)+"\nA confirmation email has been sent to you at "+email)
+            break
+        if isConfirmed in ("n","no"):
+            print("Your order has been discarded. Please make your changes and try again.")
+            main()
+        else:
+            print("Invalid option.")
+
+#def sendConfirm(details):
+
 
 
 
