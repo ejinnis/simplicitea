@@ -25,6 +25,10 @@ def main():
     welcomeScreen(name)
     confirmOrder(orderFinalizer(teaPicker()))
 
+def mainRetry():
+    welcomeScreen(name)
+    confirmOrder(orderFinalizer(teaPicker()))
+
 def dbinit():
     global db
     cred = credentials.Certificate("firebase.json")
@@ -141,7 +145,7 @@ def confirmOrder(details):
             break
         if isConfirmed in ("n","no"):
             print("Your order has been discarded. Please make your changes and try again.")
-            main()
+            mainRetry()
         else:
             print("Invalid option.")
 
