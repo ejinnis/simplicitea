@@ -26,7 +26,6 @@ def main():
     confirmOrder(orderFinalizer(teaPicker()))
 
 def mainRetry():
-    total = 0
     welcomeScreen(name)
     confirmOrder(orderFinalizer(teaPicker()))
 
@@ -146,6 +145,10 @@ def confirmOrder(details):
             exit()
         if isConfirmed in ("n","no"):
             print("Your order has been discarded. Please make your changes and try again.")
+            global total
+            total = 0
+            global grandTotal
+            grandTotal = 0
             mainRetry()
         else:
             print("Invalid option.")
