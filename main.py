@@ -1,7 +1,10 @@
 import random
+import smtplib
+from keys import sender_address, sender_pass
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 
 name = 'Mr. Potter'
-email = 'apotter@wsd1.org'
 teaID = [0,1,2,3,4,5,6,7]
 teas = ["Earl Grey","Orange Pekoe","Peppermint","Calmomile","English Breakfast","Chai","Green","Oolong"]
 bagCountsID = [0,1,2]
@@ -12,11 +15,26 @@ total = 0
 isInStock = [True,True,False,True,True,True,False,True]
 
 
+
 def main():
+    emailinit()
     welcomeScreen(name)
     confirmOrder(orderFinalizer(teaPicker()))
 
-#def emailinit():
+def emailinit():
+    #i know you're not really supposed to use globals this much but I am lazy.
+    global senderName
+    global reciever
+    global orderNum
+    global session
+    orderNum = random.randint(1000000,9999999)
+
+    senderName = sender_address
+    senderPass = sender_pass
+    reciever = 'elwoodjinnis@outlook.com'
+    session = smtplib.SMTP('smtp.gmail.com', 587)
+    session.starttls()
+    session.login(sender_address,sender_pass)
 
 def getTotal(item):
     global total
@@ -74,27 +92,34 @@ def orderFinalizer(tea):
     print("Your new total is $"+str(getTotal(shipCost)))
     taxAndService = total * 0.14
     print("+12% GST and PST, +2% Service fee")
+    global grandTotal
     grandTotal = round(getTotal(taxAndService),2)
     print("Your grand total is $"+str(grandTotal))
     return [tea,getBags,getShip,grandTotal]
 
 
 def confirmOrder(details):
-    for i in range(7):
+    global readableTea
+    global readableBags
+    global readableShip
+    for i in range(8):
         if details[0] == teaID[i]:
-            print("Selected tea: "+teas[i])
+            readableTea = "Selected tea: "+teas[i]
+            print(readableTea)
     for i in range(3):
         if details[1] == bagCountsID[i]:
-            print("Selected quantity: "+str(bagCounts[i])+" bags")
+            readableBags = str(bagCounts[i])+" bags"
+            print(readableBags)
     for i in range(3):
         if details[2] == shippingID[i]:
-            print("Selected shipping: "+shippingOptions[i])
+            readableShip = "Selected shipping: "+shippingOptions[i]
+            print(readableShip)
 
     isConfirmed = input("Place your order? (y/n) \n")
     while True:
         if isConfirmed in ("y","yes"):
-            orderNum = 74627634773 #sendConfirm(details)
-            print("Your order has been placed! Your order # is: "+str(orderNum)+"\nA confirmation email has been sent to you at "+email)
+            sendConfirm(details)
+            print("Your order has been placed! Your order # is: "+str(orderNum)+"\nA confirmation email has been sent to you at "+reciever)
             break
         if isConfirmed in ("n","no"):
             print("Your order has been discarded. Please make your changes and try again.")
@@ -102,8 +127,16 @@ def confirmOrder(details):
         else:
             print("Invalid option.")
 
-#def sendConfirm(details):
-
+def sendConfirm(details):
+    message = MIMEMultipart()
+    message['From'] = senderName
+    message['To'] = reciever
+    message['Subject'] = 'Order Confirmation: #'+str(orderNum)
+    mailContent = 'Hello, '+name+'. This is a confirmation email for your order containing:\n'+readableTea+'\n'+readableBags+'\n'+readableShip+'\nGrand Total (+ tax / service fee): $'+str(grandTotal)+'\n\nIf you did not place this order, please contact Customer Support.\nThank you!'
+    message.attach(MIMEText(mailContent, 'plain'))
+    text = message.as_string()
+    session.sendmail(senderName, reciever, text)
+    session.quit()
 
 
 
