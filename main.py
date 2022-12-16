@@ -142,7 +142,7 @@ def confirmOrder(details):
                 u'shipTime': readableShip
                 })
             print("Your order has been placed! Your order # is: "+str(orderNum)+"\nA confirmation email has been sent to you at "+reciever)
-            break
+            exit()
         if isConfirmed in ("n","no"):
             print("Your order has been discarded. Please make your changes and try again.")
             mainRetry()
@@ -159,7 +159,6 @@ def sendConfirm(details):
     text = message.as_string()
     session.sendmail(senderName, reciever, text)
     session.quit()
-    exit()
 
 
 
