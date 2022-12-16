@@ -1,5 +1,8 @@
 import random
 import smtplib
+import firebase_admin
+from firebase_admin import credentials
+from firebase_admin import firestore
 from keys import sender_address, sender_pass
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -17,9 +20,16 @@ isInStock = [True,True,False,True,True,True,False,True]
 
 
 def main():
+    dbinit()
     emailinit()
     welcomeScreen(name)
     confirmOrder(orderFinalizer(teaPicker()))
+
+def dbinit():
+    global db
+    cred = credentials.Certificate("firebase.json")
+    firebase_admin.initialize_app(cred)
+    db = firestore.client()
 
 def emailinit():
     #i know you're not really supposed to use globals this much but I am lazy.
@@ -119,6 +129,14 @@ def confirmOrder(details):
     while True:
         if isConfirmed in ("y","yes"):
             sendConfirm(details)
+            doc_ref = db.collection(u'orders').document(str(orderNum))
+            doc_ref.set({
+                u'name': name,
+                u'email': reciever,
+                u'teaType': readableTea,
+                u'bagCount': readableBags,
+                u'shipTime': readableShip
+                })
             print("Your order has been placed! Your order # is: "+str(orderNum)+"\nA confirmation email has been sent to you at "+reciever)
             break
         if isConfirmed in ("n","no"):
