@@ -41,7 +41,7 @@ def emailinit():
 
     senderName = sender_address
     senderPass = sender_pass
-    reciever = 'elwoodjinnis@outlook.com'
+    reciever = 'apotter@wsd1.org'
     session = smtplib.SMTP('smtp.gmail.com', 587)
     session.starttls()
     session.login(sender_address,sender_pass)
