@@ -26,6 +26,7 @@ def main():
     confirmOrder(orderFinalizer(teaPicker()))
 
 def mainRetry():
+    grandTotal = 0
     welcomeScreen(name)
     confirmOrder(orderFinalizer(teaPicker()))
 
