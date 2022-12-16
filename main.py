@@ -159,6 +159,7 @@ def sendConfirm(details):
     text = message.as_string()
     session.sendmail(senderName, reciever, text)
     session.quit()
+    exit()
 
 
 
