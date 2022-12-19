@@ -7,7 +7,7 @@ from keys import sender_address, sender_pass
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
-name = 'Elwood'
+name = str(input("What is your name?\n"))
 teaID = [0,1,2,3,4,5,6,7]
 teas = ["Earl Grey","Orange Pekoe","Peppermint","Calmomile","English Breakfast","Chai","Green","Oolong"]
 bagCountsID = [0,1,2]
@@ -45,7 +45,7 @@ def emailinit():
 
     senderName = sender_address
     senderPass = sender_pass
-    reciever = 'x1nni@x1nni.xyz'
+    reciever = str(input("What is your email address?\n"))
     session = smtplib.SMTP('smtp.gmail.com', 587)
     session.starttls()
     session.login(sender_address,sender_pass)
